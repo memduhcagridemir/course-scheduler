@@ -1,10 +1,19 @@
-import itertools    # generate unique ids for objects in case we need
-
 """ Slot class represents timeslots in a week """
 class Slot:
-    autoIncrementalID = itertools.count().next
+    def __init__(self, inputString):
+        stringParts = inputString.split(",")
+        cursorPosition = 0
 
-    def __init__(self, dow, time):
-        self.id = Slot.autoIncrementalID()
-        self.dow = dow      # day of week of slot
-        self.time = time    # starting time of slot
+        self.id = stringParts[cursorPosition].strip()
+        cursorPosition += 1
+
+        self.dow = stringParts[cursorPosition].strip()
+        cursorPosition += 1
+
+        self.time = stringParts[cursorPosition].strip()
+        cursorPosition += 1
+
+    def printObject(self):
+        print "Slot: " + str(self.id)
+        print "Dow: " + str(self.dow)
+        print "Time: " + str(self.time)

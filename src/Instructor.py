@@ -1,10 +1,32 @@
-import itertools    # generate unique ids for objects in case we need
-
 """ Instructor class represents faculty staff """
 class Instructor:
-    autoIncrementalID = itertools.count().next
+    def __init__(self, inputString):
+        stringParts = inputString.split(",")
+        cursorPosition = 0
 
-    def __init__(self, name, capacity):
-        self.id = Room.autoIncrementalID()
-        self.name = name
-        self.capacity = capacity
+        self.id = stringParts[cursorPosition].strip()
+        cursorPosition += 1
+
+        self.name = stringParts[cursorPosition].strip()
+        cursorPosition += 1
+
+        self.unwanteds = []
+        self.unpreferreds = []
+
+        numberOfUnwanteds = int(stringParts[cursorPosition].strip())
+        cursorPosition += 1
+
+        for i in range(cursorPosition, cursorPosition + numberOfUnwanteds):
+            self.unwanteds.append(int(stringParts[i]))
+
+        cursorPosition += numberOfUnwanteds
+
+        numberOfUnpreferreds = int(stringParts[cursorPosition].strip())
+        for i in range(cursorPosition, cursorPosition + numberOfUnpreferreds):
+            self.unpreferreds.append(int(stringParts[i]))
+
+    def printObject(self):
+        print "Instructor: " + str(self.id)
+        print "Name: " + str(self.name)
+        print "Unwanteds: " + str(self.unwanteds)
+        print "Unpreferreds: " + str(self.unpreferreds)
