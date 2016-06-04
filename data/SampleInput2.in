@@ -1,0 +1,149 @@
+# --------------------------------------------------------------------------------
+# Course scheduling problem generator v1.0 by Selim Temizer
+#
+# Generated on          = Mon May 30 07:47:33 EEST 2016
+# File name             = Input2.txt
+# Number of instructors = 20
+# Number of courses     = 50
+# --------------------------------------------------------------------------------
+
+
+# Slot = Index , Day , Hour
+# -------------------------
+
+Slot =  1 , Monday    ,  8:40
+Slot =  2 , Monday    ,  9:40
+Slot =  3 , Monday    , 10:40
+Slot =  4 , Monday    , 11:40
+Slot =  5 , Monday    , 12:40
+Slot =  6 , Monday    , 13:40
+Slot =  7 , Monday    , 14:40
+Slot =  8 , Monday    , 15:40
+Slot =  9 , Monday    , 16:40
+Slot = 10 , Tuesday   ,  8:40
+Slot = 11 , Tuesday   ,  9:40
+Slot = 12 , Tuesday   , 10:40
+Slot = 13 , Tuesday   , 11:40
+Slot = 14 , Tuesday   , 12:40
+Slot = 15 , Tuesday   , 13:40
+Slot = 16 , Tuesday   , 14:40
+Slot = 17 , Tuesday   , 15:40
+Slot = 18 , Tuesday   , 16:40
+Slot = 19 , Wednesday ,  8:40
+Slot = 20 , Wednesday ,  9:40
+Slot = 21 , Wednesday , 10:40
+Slot = 22 , Wednesday , 11:40
+Slot = 23 , Wednesday , 12:40
+Slot = 24 , Wednesday , 13:40
+Slot = 25 , Wednesday , 14:40
+Slot = 26 , Wednesday , 15:40
+Slot = 27 , Wednesday , 16:40
+Slot = 28 , Thursday  ,  8:40
+Slot = 29 , Thursday  ,  9:40
+Slot = 30 , Thursday  , 10:40
+Slot = 31 , Thursday  , 11:40
+Slot = 32 , Thursday  , 12:40
+Slot = 33 , Thursday  , 13:40
+Slot = 34 , Thursday  , 14:40
+Slot = 35 , Thursday  , 15:40
+Slot = 36 , Thursday  , 16:40
+Slot = 37 , Friday    ,  8:40
+Slot = 38 , Friday    ,  9:40
+Slot = 39 , Friday    , 10:40
+Slot = 40 , Friday    , 11:40
+Slot = 41 , Friday    , 12:40
+Slot = 42 , Friday    , 13:40
+Slot = 43 , Friday    , 14:40
+Slot = 44 , Friday    , 15:40
+Slot = 45 , Friday    , 16:40
+
+# Room = Index , Name , Capacity
+# ------------------------------
+
+Room = 1 , BMB-1 , Large
+Room = 2 , BMB-2 , Medium
+Room = 3 , BMB-3 , Medium
+Room = 4 , BMB-4 , Medium
+Room = 5 , BMB-5 , Medium
+Room = 6 , A-101 , Small
+Room = 7 , A-105 , Small
+Room = 8 , G-102 , Small
+
+# Instructor = Index , Name , #Unwanted , Unwanteds , #Unpreferred , Unpreferreds
+# -------------------------------------------------------------------------------
+
+Instructor =  1 , Emre Akbas               , 4 , 16 , 19 , 28 , 36 , 3 , 13 , 34 , 39
+Instructor =  2 , Ahmet Oguz Akyuz         , 5 , 4 , 6 , 7 , 18 , 20 , 5 , 1 , 17 , 25 , 31 , 43
+Instructor =  3 , Ferda Nur Alpaslan       , 4 , 1 , 3 , 15 , 39 , 3 , 25 , 43 , 44
+Instructor =  4 , Ismail Sengor Altingovde , 5 , 1 , 2 , 13 , 35 , 39 , 3 , 7 , 22 , 27
+Instructor =  5 , Volkan Atalay            , 5 , 2 , 12 , 37 , 44 , 45 , 5 , 14 , 19 , 22 , 24 , 43
+Instructor =  6 , Aysenur Birturk          , 4 , 1 , 11 , 18 , 45 , 5 , 2 , 4 , 30 , 35 , 43
+Instructor =  7 , Tolga Can                , 4 , 4 , 5 , 16 , 28 , 5 , 1 , 18 , 33 , 40 , 43
+Instructor =  8 , Ahmet Cosar              , 5 , 1 , 2 , 15 , 16 , 24 , 5 , 5 , 18 , 20 , 26 , 44
+Instructor =  9 , Ruken Cakici             , 4 , 3 , 14 , 19 , 38 , 5 , 6 , 9 , 23 , 34 , 41
+Instructor = 10 , Nihan Kesim Cicekli      , 5 , 3 , 19 , 23 , 24 , 26 , 4 , 6 , 11 , 17 , 42
+Instructor = 11 , Ali Hikmet Dogru         , 5 , 15 , 21 , 26 , 40 , 42 , 3 , 22 , 39 , 43
+Instructor = 12 , Seyda Ertekin            , 4 , 20 , 29 , 30 , 40 , 3 , 4 , 11 , 33
+Instructor = 13 , Ebru Aydin Gol           , 4 , 3 , 10 , 14 , 18 , 3 , 16 , 32 , 37
+Instructor = 14 , Veysi Isler              , 5 , 2 , 19 , 33 , 35 , 38 , 5 , 4 , 8 , 22 , 23 , 25
+Instructor = 15 , Sinan Kalkan             , 5 , 8 , 19 , 27 , 42 , 45 , 4 , 1 , 28 , 31 , 36
+Instructor = 16 , Pinar Karagoz            , 5 , 12 , 14 , 18 , 19 , 28 , 5 , 6 , 29 , 33 , 36 , 37
+Instructor = 17 , Murat Manguoglu          , 5 , 5 , 12 , 21 , 40 , 45 , 4 , 2 , 18 , 32 , 41
+Instructor = 18 , Halit Oguztuzun          , 5 , 6 , 7 , 16 , 17 , 44 , 3 , 9 , 14 , 15
+Instructor = 19 , Ertan Onur               , 4 , 10 , 12 , 17 , 18 , 5 , 2 , 8 , 29 , 30 , 32
+Instructor = 20 , Atilla Ozgit             , 4 , 1 , 2 , 36 , 41 , 5 , 5 , 20 , 26 , 34 , 45
+
+# Course = Index , Name , Capacity , Arrangement , InstructorIndex
+# ----------------------------------------------------------------
+
+Course =  1 , CENG 140 (1) , Medium , A21 ,  6
+Course =  2 , CENG 140 (2) , Medium , A21 ,  2
+Course =  3 , CENG 140 (3) , Medium , A21 , 16
+Course =  4 , CENG 232 (1) , Medium , A21 , 13
+Course =  5 , CENG 232 (2) , Medium , A21 ,  9
+Course =  6 , CENG 232 (3) , Medium , A21 , 17
+Course =  7 , CENG 242 (1) , Medium , A21 , 10
+Course =  8 , CENG 242 (2) , Medium , A21 ,  3
+Course =  9 , CENG 242 (3) , Medium , A21 , 11
+Course = 10 , CENG 280 (1) , Medium , A21 ,  5
+Course = 11 , CENG 280 (2) , Medium , A21 , 14
+Course = 12 , CENG 280 (3) , Medium , A21 , 17
+Course = 13 , CENG 334 (1) , Medium , A21 , 18
+Course = 14 , CENG 334 (2) , Medium , A21 ,  8
+Course = 15 , CENG 334 (3) , Medium , A21 , 14
+Course = 16 , CENG 336 (1) , Medium , A21 , 15
+Course = 17 , CENG 336 (2) , Medium , A21 ,  7
+Course = 18 , CENG 336 (3) , Medium , A21 ,  2
+Course = 19 , CENG 350 (1) , Medium , A21 , 19
+Course = 20 , CENG 350 (2) , Medium , A21 , 17
+Course = 21 , CENG 350 (3) , Medium , A21 , 19
+Course = 22 , CENG 384 (1) , Medium , A21 , 13
+Course = 23 , CENG 384 (2) , Medium , A21 , 18
+Course = 24 , CENG 384 (3) , Medium , A21 , 10
+Course = 25 , CENG 492     , Large  , A21 , 14
+Course = 26 , CENG 316     , Medium , A21 ,  1
+Course = 27 , CENG 352     , Medium , A21 , 19
+Course = 28 , CENG 371     , Small  , A21 , 20
+Course = 29 , CENG 382     , Small  , A21 , 13
+Course = 30 , CENG 443     , Medium , A21 , 11
+Course = 31 , CENG 451     , Medium , A21 , 11
+Course = 32 , CENG 462     , Medium , A21 ,  5
+Course = 33 , CENG 463     , Medium , A21 ,  4
+Course = 34 , CENG 469     , Small  , A21 , 20
+Course = 35 , CENG 495     , Medium , A21 , 12
+Course = 36 , CENG 497     , Small  , A21 ,  4
+Course = 37 , CENG 200     , Medium , A21 ,  8
+Course = 38 , CENG 301     , Medium , A21 ,  7
+Course = 39 , CENG 302     , Medium , A21 ,  6
+Course = 40 , CENG 305     , Large  , A21 ,  8
+Course = 41 , CENG 513     , Medium , A3  , 16
+Course = 42 , CENG 514     , Medium , A3  ,  3
+Course = 43 , CENG 538     , Medium , A3  ,  9
+Course = 44 , CENG 553     , Medium , A3  , 20
+Course = 45 , CENG 561     , Medium , A3  ,  6
+Course = 46 , CENG 562     , Medium , A3  ,  1
+Course = 47 , CENG 563     , Medium , A3  , 12
+Course = 48 , CENG 565     , Medium , A3  , 10
+Course = 49 , CENG 577     , Medium , A3  , 15
+Course = 50 , CENG 580     , Medium , A3  , 12
+
