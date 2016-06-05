@@ -1,9 +1,12 @@
 import sys
+import random
 
 from src.Slot import Slot
 from src.Room import Room
 from src.Course import Course
 from src.Instructor import Instructor
+
+from src.GeneticAlgorithm import GeneticAlgorithm
 
 def main(cmdArguments):
     if len(cmdArguments) <= 0:
@@ -29,6 +32,10 @@ def main(cmdArguments):
                 courses.append(Course(lineSections[1]))
             elif lineSections[0].strip() == "Instructor":
                 instructors.append(Instructor(lineSections[1]))
+
+    algo = GeneticAlgorithm(slots, rooms, courses, instructors)
+    algo.initChromosomes(10)
+    algo.execute()
 
 """
     for course in courses:
