@@ -30,5 +30,5 @@ class CourseClass:
         return False
 
     def printObject(self):
-        print "Class"
         self.course.printObject()
+        self.instructor.printObject()

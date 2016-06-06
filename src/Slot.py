@@ -14,6 +14,4 @@ class Slot:
         cursorPosition += 1
 
     def printObject(self):
-        print "Slot: " + str(self.id)
-        print "Dow: " + str(self.dow)
-        print "Time: " + str(self.time)
+        print str(self.dow) + ", " + str(self.time)

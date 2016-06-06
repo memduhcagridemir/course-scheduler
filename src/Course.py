@@ -20,8 +20,5 @@ class Course:
         cursorPosition += 1
 
     def printObject(self):
-        print "Course: " + str(self.id)
-        print "Name: " + str(self.name)
-        print "Capacity: " + str(self.capacity)
-        print "Arrangement: " + str(self.arrangement)
-        print "InstructorIndex: " + str(self.instructorIndex)
+        print "Course Name: " + str(self.name) + str(" | ") + "Capacity: " + str(self.capacity)
+        # print "Arrangement: " + str(self.arrangement)

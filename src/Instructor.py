@@ -25,8 +25,17 @@ class Instructor:
         for i in range(cursorPosition, cursorPosition + numberOfUnpreferreds):
             self.unpreferreds.append(int(stringParts[i]))
 
+    def wantsSlot(self, slotId):
+        if slotId in self.unwanteds:
+            return False
+
+        return True
+
+    def prefersSlot(self, slotId):
+        if slotId in self.unpreferreds:
+            return False
+
+        return True
+
     def printObject(self):
-        print "Instructor: " + str(self.id)
-        print "Name: " + str(self.name)
-        print "Unwanteds: " + str(self.unwanteds)
-        print "Unpreferreds: " + str(self.unpreferreds)
+        print "Instructor Name: " + str(self.name)
