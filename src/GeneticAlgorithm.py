@@ -17,18 +17,18 @@ class GeneticAlgorithm:
         self.chromosomes = []
 
         self.newChromosomes = []
-        self.newChromosomeCount = 3
+        self.newChromosomeCount = 1000
 
     def initChromosomes(self, numberOfChromosomes):
         for i in range(0, numberOfChromosomes):
-            chromosome = Schedule(self.slots, self.rooms, self.courses)
-            chromosome.createSchedule(self.instructors)
+            chromosome = Schedule(self.slots, self.rooms, self.courses, self.instructors)
+            chromosome.createSchedule()
 
             self.chromosomes.append({"chromosome": chromosome, "fitness": chromosome.calculateFitness()})
 
     def continueIteration(self):
         for chromosome in self.chromosomes:
-            if chromosome["fitness"] == 1.0 and chromosome["chromosome"].satisfactory:
+            if chromosome["chromosome"].satisfactory:
                 chromosome["chromosome"].printObject()
                 return False
 
@@ -43,8 +43,9 @@ class GeneticAlgorithm:
                 if pair[0] != pair[1]:
                     selectedPairs.append(pair)
 
+            self.newChromosomes = []
             for pair in selectedPairs:
-                nc = self.chromosomes[pair[0]]["chromosome"].crossover(self.chromosomes[pair[1]]["chromosome"], Schedule(self.slots, self.rooms, self.courses))
+                nc = self.chromosomes[pair[0]]["chromosome"].crossover(self.chromosomes[pair[1]]["chromosome"], Schedule(self.slots, self.rooms, self.courses, self.instructors))
                 nc.rebuildSlots()
                 self.newChromosomes.append({"chromosome": nc, "fitness": nc.calculateFitness()})
 

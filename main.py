@@ -34,7 +34,7 @@ def main(cmdArguments):
                 instructors.append(Instructor(lineSections[1]))
 
     algo = GeneticAlgorithm(slots, rooms, courses, instructors)
-    algo.initChromosomes(100)
+    algo.initChromosomes(5000)
     algo.execute()
 
 """
