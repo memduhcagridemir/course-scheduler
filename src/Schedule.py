@@ -17,6 +17,7 @@ class Schedule:
         self.courses = courses
         self.timeSlots = slots
         self.instructors = instructors
+        self.generation = 1
 
     def createSchedule(self):
         for course in self.courses:
@@ -64,7 +65,6 @@ class Schedule:
         return True
 
     def calculateFitness(self):
-        self.satisfactory = False
         coursesToAdd = []
         extraCourses = []
         for course in self.courses:
@@ -89,8 +89,7 @@ class Schedule:
                 if len(self.slots[classIndex]) == 1:
                     spareRoom = True
             else:
-                print someClass
-                print "Hataaa"
+                raise ValueError(someClass)
 
             classPoint = 0
             if spareRoom:
@@ -117,6 +116,13 @@ class Schedule:
 
                 if self.slots[classIndex][0].instructor.prefersSlot((classIndex % len(self.timeSlots)) + 1):
                     classPoint += 1
+
+                dayIndex = (classIndex % len(self.timeSlots)) / (len(self.timeSlots) / 5)
+                if dayIndex != ((classIndex + someClass["length"] - 1) % len(self.timeSlots)) / (len(self.timeSlots) / 5):
+                    self.satisfactory = False
+
+            else:
+                self.satisfactory = False
 
             classPoints.append(classPoint)
 
@@ -159,20 +165,21 @@ class Schedule:
                 print "Hata"
 
     def crossover(self, p2, p3):
-        firstParentCrossoverIndex = random.randint(0, len(self.classes))
-        secondParentCrossoverIndex = random.randint(0, len(p2.classes))
+        firstCrossoverIndex = random.randint(0, len(self.classes) - 1)
+        secondCrossoverIndex = random.randint(firstCrossoverIndex, len(self.classes) - 1)
 
-        p3.classes = self.classes[0:firstParentCrossoverIndex] + p2.classes[secondParentCrossoverIndex:]
-        p3.rebuildSlots()
+        p3.classes = self.classes[0:firstCrossoverIndex] + p2.classes[firstCrossoverIndex:secondCrossoverIndex] + self.classes[secondCrossoverIndex:]
+        p3.generation = max(self.generation, p2.generation) + 1
 
         return p3
 
     def mutation(self):
-        classIndex = random.randint(0, len(self.classes))
-        self.classes[classIndex]["slotIndex"] = random.randint(0, len(self.slots))
+        classIndex = random.randint(0, len(self.classes) - 1)
+        self.classes[classIndex]["slotIndex"] = random.randint(0, len(self.slots) - 1)
         self.rebuildSlots()
 
     def printObject(self):
+        print "Generation: " + str(self.generation)
         for i in range(0, len(self.slots)):
             roomIndex = i / len(self.timeSlots)
             timeIndex = i % len(self.timeSlots)

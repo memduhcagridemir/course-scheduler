@@ -21,4 +21,4 @@ class Course:
 
     def printObject(self):
         print "Course Name: " + str(self.name) + str(" | ") + "Capacity: " + str(self.capacity)
-        # print "Arrangement: " + str(self.arrangement)
+        print "Arrangement: " + str(self.arrangement)

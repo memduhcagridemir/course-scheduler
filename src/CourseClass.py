@@ -8,23 +8,13 @@ class CourseClass:
         self.instructor = instructor
 
     def roomHasEnoughCapacity(self, room):
-        roomCapacity = 0
-        if room.capacity == 'Large':
-            roomCapacity = 60
-        elif room.capacity == 'Medium':
-            roomCapacity = 30
-        else:
-            roomCapacity = 10
+        capacity = {
+            "Large": 3,
+            "Medium": 2,
+            "Small": 1
+        }
 
-        courseCapacity = 0
-        if self.course.capacity == 'Large':
-            courseCapacity = 60
-        elif self.course.capacity == 'Medium':
-            courseCapacity = 30
-        else:
-            courseCapacity = 10
-
-        if roomCapacity >= courseCapacity:
+        if capacity[room.capacity] >= capacity[self.course.capacity]:
             return True
 
         return False
