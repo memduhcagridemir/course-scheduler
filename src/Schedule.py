@@ -97,7 +97,8 @@ class Schedule:
                 classPoint += 1
 
                 room = classIndex / len(self.timeSlots)
-                room = self.rooms[room]
+                roomIndex = room
+                room = self.rooms[roomIndex]
 
                 if self.slots[classIndex][0].roomHasEnoughCapacity(room):
                     classPoint += 1
@@ -120,6 +121,21 @@ class Schedule:
                 dayIndex = (classIndex % len(self.timeSlots)) / (len(self.timeSlots) / 5)
                 if dayIndex != ((classIndex + someClass["length"] - 1) % len(self.timeSlots)) / (len(self.timeSlots) / 5):
                     self.satisfactory = False
+                else:
+                    classPoint += 1
+
+                # check if same course arranged for the different classrooms at the same time
+                hourIndex = classIndex - dayIndex * 9 - roomIndex * 45
+                checkIndex = hourIndex
+                while checkIndex < len(self.slots):
+                    if checkIndex == classIndex:
+                        checkIndex += 45
+                        continue
+
+                    if len(self.slots[checkIndex]) and self.slots[checkIndex][0].course.id == self.slots[classIndex][0].course.id:
+                        self.satisfactory = False
+
+                    checkIndex += 45
 
             else:
                 self.satisfactory = False
@@ -132,7 +148,7 @@ class Schedule:
                 extraCourses.append(someClass["class"].course.id)
 
         if len(self.classes):
-            self.fitness = (sum(classPoints) * 1.0) / (len(self.classes) * 5)
+            self.fitness = (sum(classPoints) * 1.0) / (len(self.classes) * 6)
         else:
             self.fitness = 0
 
@@ -164,19 +180,75 @@ class Schedule:
             else:
                 print "Hata"
 
-    def crossover(self, p2, p3):
+    def crossover(self, p2):
         firstCrossoverIndex = random.randint(0, len(self.classes) - 1)
         secondCrossoverIndex = random.randint(firstCrossoverIndex, len(self.classes) - 1)
 
-        p3.classes = self.classes[0:firstCrossoverIndex] + p2.classes[firstCrossoverIndex:secondCrossoverIndex] + self.classes[secondCrossoverIndex:]
-        p3.generation = max(self.generation, p2.generation) + 1
+        firstChild = Schedule(self.timeSlots, self.rooms, self.courses, self.instructors)
+        firstChild.classes = self.classes[0:firstCrossoverIndex] + p2.classes[firstCrossoverIndex:secondCrossoverIndex] + self.classes[secondCrossoverIndex:]
+        firstChild.generation = max(self.generation, p2.generation) + 1
 
-        return p3
+        secondChild = Schedule(self.timeSlots, self.rooms, self.courses, self.instructors)
+        secondChild.classes = p2.classes[0:firstCrossoverIndex] + self.classes[firstCrossoverIndex:secondCrossoverIndex] + p2.classes[secondCrossoverIndex:]
+        secondChild.generation = max(self.generation, p2.generation) + 1
+
+        return [firstChild, secondChild]
 
     def mutation(self):
         classIndex = random.randint(0, len(self.classes) - 1)
-        self.classes[classIndex]["slotIndex"] = random.randint(0, len(self.slots) - 1)
+        self.classes[classIndex]["slotIndex"] = random.randint(0, len(self.slots) - 3)
         self.rebuildSlots()
+
+    def saveHtml(self, filename):
+        with open('data/template.html', 'r') as content_file:
+            htmlRepresentation = ""
+
+            htmlRepresentation += "<h1>Generation: " + str(self.generation) + " / " + " Fitness: " + str(self.fitness) + "</h1>"
+
+            for day in range(0, 5):
+                htmlRepresentation = htmlRepresentation + "<div class=\"row\">"
+                htmlRepresentation = htmlRepresentation + "<h3>" + ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][day] + "</h3>"
+                htmlRepresentation = htmlRepresentation + "<table class=\"table table-bordered\">"
+
+                htmlRepresentation += "<tr>"
+                htmlRepresentation += "<th width=\"10%\">Room</th>"
+                htmlRepresentation += "<th width=\"10%\">8:40</th>"
+                htmlRepresentation += "<th width=\"10%\">9:40</th>"
+                htmlRepresentation += "<th width=\"10%\">10:40</th>"
+                htmlRepresentation += "<th width=\"10%\">11:40</th>"
+                htmlRepresentation += "<th width=\"10%\">12:40</th>"
+                htmlRepresentation += "<th width=\"10%\">13:40</th>"
+                htmlRepresentation += "<th width=\"10%\">14:40</th>"
+                htmlRepresentation += "<th width=\"10%\">15:40</th>"
+                htmlRepresentation += "<th width=\"10%\">16:40</th>"
+                htmlRepresentation += "</tr>"
+
+                for room in range(0, len(self.rooms)):
+                    htmlRepresentation = htmlRepresentation + "<tr>"
+
+                    roomName = self.rooms[room].name
+                    htmlRepresentation = htmlRepresentation + "<td>" + roomName + "</td>"
+
+                    for hour in range(0, 9):
+                        timeSlot = day * 9 + room * 45 + hour
+                        if(len(self.slots[timeSlot])):
+                            htmlRepresentation = htmlRepresentation + "<td>" + self.slots[timeSlot][0].course.name + " [" + self.slots[timeSlot][0].instructor.getInitials() +"]</td>"
+                        else:
+                            htmlRepresentation = htmlRepresentation + "<td></td>"
+
+                    htmlRepresentation = htmlRepresentation + "</tr>"
+
+                htmlRepresentation = htmlRepresentation + "</table>"
+                htmlRepresentation = htmlRepresentation + "</div>"
+                htmlRepresentation = htmlRepresentation + "<hr>"
+
+            fileContents = content_file.read()
+
+            fileContents = fileContents.replace('##PYTHON_CHANGE_THIS##', htmlRepresentation)
+
+            writeToFile = open(filename,'w')
+            writeToFile.write(fileContents)
+            writeToFile.close()
 
     def printObject(self):
         print "Generation: " + str(self.generation)

@@ -19,7 +19,7 @@ class GeneticAlgorithm:
 
         # new generations generated on every turn
         self.newChromosomes = []
-        self.newChromosomeCount = 4000
+        self.newChromosomeCount = 4800
 
     def initChromosomes(self, numberOfChromosomes):
         for i in range(0, numberOfChromosomes):
@@ -32,15 +32,28 @@ class GeneticAlgorithm:
         for chromosome in self.chromosomes:
             if chromosome["fitness"] >= 0.70 and chromosome["chromosome"].satisfactory:
                 chromosome["chromosome"].printObject()
+                chromosome["chromosome"].saveHtml('schedule_output.html')
                 return False
+
+        """
+        if self.chromosomes[0]["chromosome"].generation > 10:
+            self.chromosomes[len(self.chromosomes) - 1]["chromosome"].printObject()
+            self.chromosomes[len(self.chromosomes) - 1]["chromosome"].saveHtml('schedule_output.html')
+            print "This schedule does not satify hard requirements but a \"significant\" time is passed, so it is returned. Please try again with (smaller) inputs"
+            return False
+        """
 
         return True
 
     def execute(self):
         while self.continueIteration():
+            for i in range(0, int(len(self.chromosomes) * 0.05)): # do not mutate best schedules
+                mutationIndex = random.randint(0, int(len(self.chromosomes) * 0.05) - 1)
+                self.chromosomes[mutationIndex]["chromosome"].mutation()
+
             # select random pair as parent for new generation
             selectedPairs = []
-            while len(selectedPairs) < self.newChromosomeCount:
+            while len(selectedPairs) < self.newChromosomeCount / 2:
                 pair = (random.randint(0, len(self.chromosomes) - 1), random.randint(0, len(self.chromosomes) - 1))
                 if pair[0] != pair[1]:
                     selectedPairs.append(pair)
@@ -48,12 +61,17 @@ class GeneticAlgorithm:
             # new generation of solutions
             self.newChromosomes = []
             for pair in selectedPairs:
-                nc = self.chromosomes[pair[0]]["chromosome"].crossover(self.chromosomes[pair[1]]["chromosome"], Schedule(self.slots, self.rooms, self.courses, self.instructors))
-                nc.rebuildSlots()
-                self.newChromosomes.append({"chromosome": nc, "fitness": nc.calculateFitness()})
+                children = self.chromosomes[pair[0]]["chromosome"].crossover(self.chromosomes[pair[1]]["chromosome"])
+                for nc in children:
+                    nc.rebuildSlots()
+                    self.newChromosomes.append({"chromosome": nc, "fitness": nc.calculateFitness()})
 
             self.chromosomes = sorted(self.chromosomes, key=itemgetter('fitness'))
 
+            for i in range(0, len(self.newChromosomes)):
+                self.chromosomes[i] = self.newChromosomes[i]
+
+            """
             for chromosome in self.newChromosomes:
                 changeIndex = random.randint(0, len(self.chromosomes) - int(len(self.chromosomes) * 0.05) - 1) # dont change best 5% chromosomes
-                self.chromosomes[changeIndex] = chromosome
+            """

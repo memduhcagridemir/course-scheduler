@@ -39,3 +39,6 @@ class Instructor:
 
     def printObject(self):
         print "Instructor Name: " + str(self.name)
+
+    def getInitials(self):
+        return '.'.join(name[0].upper() for name in self.name.split())
