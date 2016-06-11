@@ -19,7 +19,7 @@ class GeneticAlgorithm:
 
         # new generations generated on every turn
         self.newChromosomes = []
-        self.newChromosomeCount = 4800
+        self.newChromosomeCount = 10000
 
     def initChromosomes(self, numberOfChromosomes):
         for i in range(0, numberOfChromosomes):

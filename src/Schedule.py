@@ -12,7 +12,6 @@ class Schedule:
         self.rooms = rooms
         self.fitness = 0.0
         self.satisfactory = False
-        self.numberOfCrossoverPoints = 1
 
         self.courses = courses
         self.timeSlots = slots
@@ -95,50 +94,49 @@ class Schedule:
             if spareRoom:
                 # class is using a spare room
                 classPoint += 1
-
-                room = classIndex / len(self.timeSlots)
-                roomIndex = room
-                room = self.rooms[roomIndex]
-
-                if self.slots[classIndex][0].roomHasEnoughCapacity(room):
-                    classPoint += 1
-                else:
-                    self.satisfactory = False
-
-                if self.instructorAvailable(self.slots[classIndex][0].instructor, classIndex):
-                    classPoint += 1
-                else:
-                    self.satisfactory = False
-
-                if self.slots[classIndex][0].instructor.wantsSlot((classIndex % len(self.timeSlots)) + 1):
-                    classPoint += 1
-                else:
-                    self.satisfactory = False
-
-                if self.slots[classIndex][0].instructor.prefersSlot((classIndex % len(self.timeSlots)) + 1):
-                    classPoint += 1
-
-                dayIndex = (classIndex % len(self.timeSlots)) / (len(self.timeSlots) / 5)
-                if dayIndex != ((classIndex + someClass["length"] - 1) % len(self.timeSlots)) / (len(self.timeSlots) / 5):
-                    self.satisfactory = False
-                else:
-                    classPoint += 1
-
-                # check if same course arranged for the different classrooms at the same time
-                hourIndex = classIndex - dayIndex * 9 - roomIndex * 45
-                checkIndex = hourIndex
-                while checkIndex < len(self.slots):
-                    if checkIndex == classIndex:
-                        checkIndex += 45
-                        continue
-
-                    if len(self.slots[checkIndex]) and self.slots[checkIndex][0].course.id == self.slots[classIndex][0].course.id:
-                        self.satisfactory = False
-
-                    checkIndex += 45
-
             else:
                 self.satisfactory = False
+
+            room = classIndex / len(self.timeSlots)
+            roomIndex = room
+            room = self.rooms[roomIndex]
+
+            if self.slots[classIndex][0].roomHasEnoughCapacity(room):
+                classPoint += 1
+            else:
+                self.satisfactory = False
+
+            if self.instructorAvailable(self.slots[classIndex][0].instructor, classIndex):
+                classPoint += 1
+            else:
+                self.satisfactory = False
+
+            if self.slots[classIndex][0].instructor.wantsSlot((classIndex % len(self.timeSlots)) + 1):
+                classPoint += 1
+            else:
+                self.satisfactory = False
+
+            if self.slots[classIndex][0].instructor.prefersSlot((classIndex % len(self.timeSlots)) + 1):
+                classPoint += 1
+
+            dayIndex = (classIndex % len(self.timeSlots)) / (len(self.timeSlots) / 5)
+            if dayIndex != ((classIndex + someClass["length"] - 1) % len(self.timeSlots)) / (len(self.timeSlots) / 5):
+                self.satisfactory = False
+            else:
+                classPoint += 1
+
+            # check if same course arranged for the different classrooms at the same time
+            hourIndex = classIndex - dayIndex * 9 - roomIndex * 45
+            checkIndex = hourIndex
+            while checkIndex < len(self.slots):
+                if checkIndex == classIndex:
+                    checkIndex += 45
+                    continue
+
+                if len(self.slots[checkIndex]) and self.slots[checkIndex][0].course.id == self.slots[classIndex][0].course.id:
+                    self.satisfactory = False
+
+                checkIndex += 45
 
             classPoints.append(classPoint)
 
@@ -147,8 +145,12 @@ class Schedule:
             else:
                 extraCourses.append(someClass["class"].course.id)
 
+        if len(coursesToAdd) == 0 and len(extraCourses) == 0:
+            for i in range(0, len(classPoints)):
+                classPoints[i] += 1
+
         if len(self.classes):
-            self.fitness = (sum(classPoints) * 1.0) / (len(self.classes) * 6)
+            self.fitness = (sum(classPoints) * 1.0) / (len(self.classes) * 7)
         else:
             self.fitness = 0
 
