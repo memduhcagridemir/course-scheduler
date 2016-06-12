@@ -1,6 +1,7 @@
 from CourseClass import CourseClass
 
 import random
+import copy
 
 class Schedule:
     def __init__(self, slots, rooms, courses, instructors):
@@ -93,7 +94,7 @@ class Schedule:
             classPoint = 0
             if spareRoom:
                 # class is using a spare room
-                classPoint += 1
+                classPoint += 4
             else:
                 self.satisfactory = False
 
@@ -101,18 +102,19 @@ class Schedule:
             roomIndex = room
             room = self.rooms[roomIndex]
 
-            if self.slots[classIndex][0].roomHasEnoughCapacity(room):
-                classPoint += 1
+            roomCapacity = self.slots[classIndex][0].roomHasEnoughCapacity(room)
+            if roomCapacity:
+                classPoint += roomCapacity
             else:
                 self.satisfactory = False
 
             if self.instructorAvailable(self.slots[classIndex][0].instructor, classIndex):
-                classPoint += 1
+                classPoint += 4
             else:
                 self.satisfactory = False
 
             if self.slots[classIndex][0].instructor.wantsSlot((classIndex % len(self.timeSlots)) + 1):
-                classPoint += 1
+                classPoint += 4
             else:
                 self.satisfactory = False
 
@@ -123,9 +125,11 @@ class Schedule:
             if dayIndex != ((classIndex + someClass["length"] - 1) % len(self.timeSlots)) / (len(self.timeSlots) / 5):
                 self.satisfactory = False
             else:
-                classPoint += 1
+                classPoint += 4
 
             # check if same course arranged for the different classrooms at the same time
+            falseFlag = False
+
             hourIndex = classIndex - dayIndex * 9 - roomIndex * 45
             checkIndex = hourIndex
             while checkIndex < len(self.slots):
@@ -134,9 +138,14 @@ class Schedule:
                     continue
 
                 if len(self.slots[checkIndex]) and self.slots[checkIndex][0].course.id == self.slots[classIndex][0].course.id:
+                    falseFlag = True
                     self.satisfactory = False
+                    break
 
                 checkIndex += 45
+
+            if falseFlag != True:
+                classPoint += 4
 
             classPoints.append(classPoint)
 
@@ -147,10 +156,10 @@ class Schedule:
 
         if len(coursesToAdd) == 0 and len(extraCourses) == 0:
             for i in range(0, len(classPoints)):
-                classPoints[i] += 1
+                classPoints[i] += 16
 
         if len(self.classes):
-            self.fitness = (sum(classPoints) * 1.0) / (len(self.classes) * 7)
+            self.fitness = (sum(classPoints) * 1.0) / (len(classPoints) * 45)
         else:
             self.fitness = 0
 
@@ -183,6 +192,9 @@ class Schedule:
                 print "Hata"
 
     def crossover(self, p2):
+        random.shuffle(self.classes)
+        random.shuffle(p2.classes)
+
         firstCrossoverIndex = random.randint(0, len(self.classes) - 1)
         secondCrossoverIndex = random.randint(firstCrossoverIndex, len(self.classes) - 1)
 
@@ -197,9 +209,14 @@ class Schedule:
         return [firstChild, secondChild]
 
     def mutation(self):
-        classIndex = random.randint(0, len(self.classes) - 1)
-        self.classes[classIndex]["slotIndex"] = random.randint(0, len(self.slots) - 3)
-        self.rebuildSlots()
+        p4 = copy.deepcopy(self)
+
+        classIndex = random.randint(0, len(p4.classes) - 1)
+        p4.classes[classIndex]["slotIndex"] = random.randint(0, len(p4.slots) - 3)
+        p4.generation = self.generation + 1
+        p4.rebuildSlots()
+
+        return p4
 
     def saveHtml(self, filename):
         with open('data/template.html', 'r') as content_file:

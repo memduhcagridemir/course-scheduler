@@ -14,10 +14,12 @@ class CourseClass:
             "Small": 1
         }
 
-        if capacity[room.capacity] >= capacity[self.course.capacity]:
-            return True
+        if capacity[room.capacity] > capacity[self.course.capacity]:
+            return 2
+        elif capacity[room.capacity] == capacity[self.course.capacity]:
+            return 8
 
-        return False
+        return 0
 
     def printObject(self):
         self.course.printObject()
