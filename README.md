@@ -1,2 +1,4 @@
-# CEng562-HW2
-A course scheduler with genetic algorithms
+# Course Scheduler
+A course scheduler developed for the homework of machine learning course. 
+
+This scheduler uses genetic algorithm to find the best possible course schedule.
